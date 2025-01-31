@@ -41,7 +41,7 @@
             <select name="role" class="form-control" required>
                 <option value="">Select</option>
                 <option value="speaker">Speaker</option>
-                <option value="speaker">Reviewer</option>
+                <option value="reviewer">Reviewer</option>
             </select>
         </div>
 
