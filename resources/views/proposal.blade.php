@@ -11,9 +11,16 @@
     
 
     <div class="tab-content mt-4" id="proposalTabsContent">
-        <!-- Submit Proposal Tab -->
+    @include('logout')
         <div class="tab-pane fade show active" id="submit" role="tabpanel">
             <h2>Submit a Talk Proposal</h2>
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger">{{ $errors->first() }}</div>
+            @endif
             <form action="{{ route('proposal.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">

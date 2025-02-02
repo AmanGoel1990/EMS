@@ -9,6 +9,8 @@ use App\Models\Talkproposal;
 use App\Models\revision;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Review;
+use Illuminate\Support\Facades\DB;
 
 class TalkProposalController extends Controller
 {
@@ -34,5 +36,20 @@ class TalkProposalController extends Controller
 
         return redirect()->route('proposal')->with('success', 'Proposal submitted successfully!');
     }
-
+    public function getStatistics()
+    {
+        $totalProposals = TalkProposal::count();
+        $averageRating = Review::avg('rating');
+        
+        $proposalsPerTag = DB::table('talkproposals')
+            ->select('tags.name', DB::raw('COUNT("tag_id") as proposal'))
+            ->join('tags', 'tags.id', '=', 'talkproposals.tag_id')
+            ->groupBy('tag_id')
+            ->get();
+        return response()->json([
+            'total_proposals' => $totalProposals,
+            'average_rating' => round($averageRating, 2),
+            'proposals_per_tag' => $proposalsPerTag
+        ]);
+    }
 }

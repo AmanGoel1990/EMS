@@ -5,24 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PdfController extends Controller
 {
-    public function showPdf($filename)
+    public function downloadPdf()
     {
-        $filePath = storage_path('app\public' . $filename);
+        $file = $_GET['file'];
+        $filePath = storage_path('app/public/' . $file);
 
-        if (file_exists($filePath)) {
-            return response()->file($filePath);
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'File not found!'], 404);
         }
-    }
 
-    public function downloadPdf($filename)
-    {
-        $filePath = storage_path('app\public' . $filename);
-
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
-        }
+        return response()->download($filePath);
     }
 }

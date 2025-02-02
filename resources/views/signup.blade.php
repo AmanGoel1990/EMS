@@ -23,22 +23,22 @@
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Full Name</label>
-            <input type="text" id="name" name="name" class="form-control" required>
+            <input type="text" id="name" name="name" class="form-control">
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+            <input type="email" id="email" name="email" class="form-control">
         </div>
 
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" name="password" class="form-control" required>
+            <input type="password" id="password" name="password" class="form-control">
         </div>
 
         <div class="mb-3">
             <label for="role" class="form-label">Role</label>
-            <select name="role" class="form-control" required>
+            <select name="role" class="form-control">
                 <option value="">Select</option>
                 <option value="speaker">Speaker</option>
                 <option value="reviewer">Reviewer</option>
