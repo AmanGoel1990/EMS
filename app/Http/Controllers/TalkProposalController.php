@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\Talkproposal;
-use App\Models\revision;
+use App\Models\Revision;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Review;
@@ -16,23 +16,23 @@ class TalkProposalController extends Controller
 {
     public function store(Request $request)
     {
-        $tag = new Tag();
-
         $filePath = $request->file('file')->store('presentation','public');
 
-        $tag->name = $request->name;
-        $tag->save();
+        $tag = Tag::create([
+            'name' => $request->name,
+        ]);
 
-        $talkproposal = new Talkproposal();
-        $talkproposal->tag_id = $tag->id;
-        $talkproposal->save();
+        $talkproposal = Talkproposal::create([
+            'tag_id' => $tag->id,
+        ]);
 
         $user = Auth::id();
-        $revision = new Revision();
-        $revision->changes = $filePath;
-        $revision->talk_proposal_id = $talkproposal->id;
-        $revision->user_id = $user;
-        $revision->save();
+
+        $revision = Revision::create([
+            'changes'       => $filePath,
+            'talk_proposal_id'  => $talkproposal->id,
+            'user_id'            => $user,
+        ]);
 
         return redirect()->route('proposal')->with('success', 'Proposal submitted successfully!');
     }
@@ -41,11 +41,11 @@ class TalkProposalController extends Controller
         $totalProposals = TalkProposal::count();
         $averageRating = Review::avg('rating');
         
-        $proposalsPerTag = DB::table('talkproposals')
-            ->select('tags.name', DB::raw('COUNT("tag_id") as proposal'))
+        $proposalsPerTag = TalkProposal::select('tags.name', DB::raw('COUNT("tag_id") as proposal'))
             ->join('tags', 'tags.id', '=', 'talkproposals.tag_id')
             ->groupBy('tag_id')
             ->get();
+
         return response()->json([
             'total_proposals' => $totalProposals,
             'average_rating' => round($averageRating, 2),

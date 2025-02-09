@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Talkproposal extends Model
 {
-    
+    protected $fillable = [
+        'tag_id',
+    ];   
 }
